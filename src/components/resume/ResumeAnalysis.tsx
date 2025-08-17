@@ -246,8 +246,7 @@ export function ResumeAnalysis({ resumeData, jobDescription = '', onAnalysisComp
                       <p className="text-sm font-medium text-gray-800 mb-2">Suggestion:</p>
                       <p className="text-sm text-gray-700">{improvement.suggestion}</p>
                       <Button 
-                        size="sm" 
-                        className="mt-2"
+                        className="mt-2 text-sm px-3 py-1"
                         onClick={(e) => {
                           e.stopPropagation();
                           applySuggestion(improvement.suggestion);

@@ -1,31 +1,33 @@
-'use client'
+'use client';
 
-import { useId } from 'react'
-import Image, { type ImageProps } from 'next/image'
-import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react'
-import clsx from 'clsx'
+import { useId } from 'react';
+import Image, { type ImageProps } from 'next/image';
+import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
+import clsx from 'clsx';
 
-import { Container } from '@/components/Container'
-import screenshotContacts from '@/images/screenshots/contacts.png'
-import screenshotInventory from '@/images/screenshots/inventory.png'
-import screenshotProfitLoss from '@/images/screenshots/profit-loss.png'
+import { Container } from '@/components/Container';
+import screenshotContacts from '@/images/screenshots/contacts.png';
+import screenshotInventory from '@/images/screenshots/inventory.png';
+import screenshotProfitLoss from '@/images/screenshots/profit-loss.png';
 
 interface Feature {
-  name: React.ReactNode
-  summary: string
-  description: string
-  image: ImageProps['src']
-  icon: React.ComponentType
+  name: React.ReactNode;
+  summary: string;
+  description: string;
+  image: ImageProps['src'];
+  icon: React.ComponentType;
 }
 
 const features: Array<Feature> = [
   {
     name: 'Resume Analytics',
-    summary: 'Get detailed insights into your resume\'s performance and ATS compatibility.',
-    description: 'Our AI analyzes your resume against job descriptions and provides actionable feedback to improve your chances of getting noticed by recruiters and ATS systems.',
+    summary:
+      "Get detailed insights into your resume's performance and ATS compatibility.",
+    description:
+      'Our AI analyzes your resume against job descriptions and provides actionable feedback to improve your chances of getting noticed by recruiters and ATS systems.',
     image: screenshotProfitLoss,
     icon: function ReportingIcon() {
-      let id = useId()
+      const id = useId();
       return (
         <>
           <defs>
@@ -49,13 +51,14 @@ const features: Array<Feature> = [
             strokeLinejoin="round"
           />
         </>
-      )
+      );
     },
   },
   {
     name: 'Job Tracker',
     summary: 'Organize and track all your job applications in one place.',
-    description: 'Keep track of every application, follow-up, and interview in our intuitive dashboard. Never miss an important deadline or follow-up again.',
+    description:
+      'Keep track of every application, follow-up, and interview in our intuitive dashboard. Never miss an important deadline or follow-up again.',
     image: screenshotInventory,
     icon: function InventoryIcon() {
       return (
@@ -75,13 +78,14 @@ const features: Array<Feature> = [
             fill="#fff"
           />
         </>
-      )
+      );
     },
   },
   {
     name: 'Career Advisor',
     summary: 'Personalized career guidance powered by AI.',
-    description: 'Get tailored career advice, skill recommendations, and learning resources to help you advance in your career path.',
+    description:
+      'Get tailored career advice, skill recommendations, and learning resources to help you advance in your career path.',
     image: screenshotContacts,
     icon: function ContactsIcon() {
       return (
@@ -96,10 +100,10 @@ const features: Array<Feature> = [
             fill="#fff"
           />
         </>
-      )
+      );
     },
   },
-]
+];
 
 function Feature({
   feature,
@@ -107,8 +111,8 @@ function Feature({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<'div'> & {
-  feature: Feature
-  isActive: boolean
+  feature: Feature;
+  isActive: boolean;
 }) {
   return (
     <div
@@ -118,7 +122,7 @@ function Feature({
       <div
         className={clsx(
           'w-9 rounded-lg',
-          isActive ? 'bg-blue-600' : 'bg-slate-500',
+          isActive ? 'bg-blue-600' : 'bg-slate-500'
         )}
       >
         <svg aria-hidden="true" className="h-9 w-9" fill="none">
@@ -128,7 +132,7 @@ function Feature({
       <h3
         className={clsx(
           'mt-6 text-sm font-medium',
-          isActive ? 'text-blue-600' : 'text-slate-600',
+          isActive ? 'text-blue-600' : 'text-slate-600'
         )}
       >
         {feature.name}
@@ -138,13 +142,13 @@ function Feature({
       </p>
       <p className="mt-4 text-sm text-slate-600">{feature.description}</p>
     </div>
-  )
+  );
 }
 
 function FeaturesMobile() {
   return (
     <div className="-mx-4 mt-20 flex flex-col gap-y-10 overflow-hidden px-4 sm:-mx-6 sm:px-6 lg:hidden">
-      {features.map((feature) => (
+      {features.map(feature => (
         <div key={feature.summary}>
           <Feature feature={feature} className="mx-auto max-w-2xl" isActive />
           <div className="relative mt-10 pb-10">
@@ -161,7 +165,7 @@ function FeaturesMobile() {
         </div>
       ))}
     </div>
-  )
+  );
 }
 
 function FeaturesDesktop() {
@@ -195,7 +199,7 @@ function FeaturesDesktop() {
                   key={feature.summary}
                   className={clsx(
                     'px-5 transition duration-500 ease-in-out data-selected:not-data-focus:outline-hidden',
-                    featureIndex !== selectedIndex && 'opacity-60',
+                    featureIndex !== selectedIndex && 'opacity-60'
                   )}
                   style={{ transform: `translateX(-${selectedIndex * 100}%)` }}
                   aria-hidden={featureIndex !== selectedIndex}
@@ -216,7 +220,7 @@ function FeaturesDesktop() {
         </>
       )}
     </TabGroup>
-  )
+  );
 }
 
 export function SecondaryFeatures() {
@@ -232,12 +236,13 @@ export function SecondaryFeatures() {
             Advanced Tools for Career Success
           </h2>
           <p className="mt-4 text-lg tracking-tight text-slate-700">
-            Our AI-powered platform provides everything you need to stand out in today's competitive job market.
+            Our AI-powered platform provides everything you need to stand out in
+            today's competitive job market.
           </p>
         </div>
         <FeaturesMobile />
         <FeaturesDesktop />
       </Container>
     </section>
-  )
+  );
 }

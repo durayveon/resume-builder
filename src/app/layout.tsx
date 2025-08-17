@@ -1,13 +1,13 @@
-import { type Metadata, Viewport } from 'next'
-import { Inter, Lexend } from 'next/font/google'
-import clsx from 'clsx'
-import { ThemeProvider } from '@/components/theme-provider'
-import { Toaster } from '@/components/ui/toaster'
-import { Analytics } from '@vercel/analytics/react'
-import { SpeedInsights } from '@vercel/speed-insights/next'
+import { type Metadata, Viewport } from 'next';
+import { Inter, Lexend } from 'next/font/google';
+import clsx from 'clsx';
+import { Providers } from '@/components/providers';
+import { Toaster } from '@/components/ui/toaster';
+import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 
-import '@/styles/globals.css'
-import '@/styles/tailwind.css'
+import '@/styles/globals.css';
+import '@/styles/tailwind.css';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://smartresume.ai'),
@@ -62,7 +62,7 @@ export const metadata: Metadata = {
       'max-snippet': -1,
     },
   },
-}
+};
 
 export const viewport: Viewport = {
   themeColor: [
@@ -73,27 +73,27 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 5,
   colorScheme: 'light dark',
-}
+};
 
 const inter = Inter({
   subsets: ['latin'],
   display: 'swap',
   variable: '--font-inter',
-})
+});
 
 const lexend = Lexend({
   subsets: ['latin'],
   display: 'swap',
   variable: '--font-lexend',
-})
+});
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
-    <html 
+    <html
       lang="en"
       className={clsx(
         'h-full scroll-smooth antialiased',
@@ -104,18 +104,13 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="relative flex min-h-screen flex-col">
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
+        <Providers>
           {children}
           <Toaster />
           <Analytics />
           <SpeedInsights />
-        </ThemeProvider>
+        </Providers>
       </body>
     </html>
-  )
+  );
 }

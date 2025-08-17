@@ -1,16 +1,16 @@
-'use client'
+'use client';
 
-import { useEffect, useState } from 'react'
-import Image from 'next/image'
-import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react'
-import clsx from 'clsx'
+import { useEffect, useState } from 'react';
+import Image from 'next/image';
+import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
+import clsx from 'clsx';
 
-import { Container } from '@/components/Container'
-import backgroundImage from '@/images/background-features.jpg'
-import screenshotExpenses from '@/images/screenshots/expenses.png'
-import screenshotPayroll from '@/images/screenshots/payroll.png'
-import screenshotReporting from '@/images/screenshots/reporting.png'
-import screenshotVatReturns from '@/images/screenshots/vat-returns.png'
+import { Container } from '@/components/Container';
+import backgroundImage from '@/images/background-features.jpg';
+import screenshotExpenses from '@/images/screenshots/expenses.png';
+import screenshotPayroll from '@/images/screenshots/payroll.png';
+import screenshotReporting from '@/images/screenshots/reporting.png';
+import screenshotVatReturns from '@/images/screenshots/vat-returns.png';
 
 const features = [
   {
@@ -37,27 +37,27 @@ const features = [
       'Prepare for interviews with AI-generated practice questions and answers based on the job description and your resume.',
     image: screenshotReporting,
   },
-]
+];
 
 export function PrimaryFeatures() {
-  let [tabOrientation, setTabOrientation] = useState<'horizontal' | 'vertical'>(
-    'horizontal',
-  )
+  const [tabOrientation, setTabOrientation] = useState<
+    'horizontal' | 'vertical'
+  >('horizontal');
 
   useEffect(() => {
-    let lgMediaQuery = window.matchMedia('(min-width: 1024px)')
+    const lgMediaQuery = window.matchMedia('(min-width: 1024px)');
 
     function onMediaQueryChange({ matches }: { matches: boolean }) {
-      setTabOrientation(matches ? 'vertical' : 'horizontal')
+      setTabOrientation(matches ? 'vertical' : 'horizontal');
     }
 
-    onMediaQueryChange(lgMediaQuery)
-    lgMediaQuery.addEventListener('change', onMediaQueryChange)
+    onMediaQueryChange(lgMediaQuery);
+    lgMediaQuery.addEventListener('change', onMediaQueryChange);
 
     return () => {
-      lgMediaQuery.removeEventListener('change', onMediaQueryChange)
-    }
-  }, [])
+      lgMediaQuery.removeEventListener('change', onMediaQueryChange);
+    };
+  }, []);
 
   return (
     <section
@@ -79,7 +79,8 @@ export function PrimaryFeatures() {
             Everything you need for your career success.
           </h2>
           <p className="mt-6 text-lg tracking-tight text-blue-100">
-            From crafting the perfect resume to landing your dream job, we've got you covered with AI-powered tools.
+            From crafting the perfect resume to landing your dream job, we've
+            got you covered with AI-powered tools.
           </p>
         </div>
         <TabGroup
@@ -97,7 +98,7 @@ export function PrimaryFeatures() {
                         'group relative rounded-full px-4 py-1 lg:rounded-l-xl lg:rounded-r-none lg:p-6',
                         selectedIndex === featureIndex
                           ? 'bg-white lg:bg-white/10 lg:ring-1 lg:ring-white/10 lg:ring-inset'
-                          : 'hover:bg-white/10 lg:hover:bg-white/5',
+                          : 'hover:bg-white/10 lg:hover:bg-white/5'
                       )}
                     >
                       <h3>
@@ -106,7 +107,7 @@ export function PrimaryFeatures() {
                             'font-display text-lg data-selected:not-data-focus:outline-hidden',
                             selectedIndex === featureIndex
                               ? 'text-blue-600 lg:text-white'
-                              : 'text-blue-100 hover:text-white lg:text-white',
+                              : 'text-blue-100 hover:text-white lg:text-white'
                           )}
                         >
                           <span className="absolute inset-0 rounded-full lg:rounded-l-xl lg:rounded-r-none" />
@@ -118,7 +119,7 @@ export function PrimaryFeatures() {
                           'mt-2 hidden text-sm lg:block',
                           selectedIndex === featureIndex
                             ? 'text-white'
-                            : 'text-blue-100 group-hover:text-white',
+                            : 'text-blue-100 group-hover:text-white'
                         )}
                       >
                         {feature.description}
@@ -128,7 +129,7 @@ export function PrimaryFeatures() {
                 </TabList>
               </div>
               <TabPanels className="lg:col-span-7">
-                {features.map((feature) => (
+                {features.map(feature => (
                   <TabPanel key={feature.title} unmount={false}>
                     <div className="relative sm:px-6 lg:hidden">
                       <div className="absolute -inset-x-4 -top-26 -bottom-17 bg-white/10 ring-1 ring-white/10 ring-inset sm:inset-x-0 sm:rounded-t-xl" />
@@ -153,5 +154,5 @@ export function PrimaryFeatures() {
         </TabGroup>
       </Container>
     </section>
-  )
+  );
 }

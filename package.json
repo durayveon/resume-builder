@@ -12,7 +12,7 @@
     "format:check": "prettier --check .",
     "type-check": "tsc --noEmit",
     "prepare": "husky",
-    "postinstall": "npm uninstall sharp && npm install --platform=linux --arch=x64 sharp"
+    "postinstall": "npm uninstall sharp @tailwindcss/oxide && npm install --platform=linux --arch=x64 sharp @tailwindcss/oxide"
   },
   "lint-staged": {
     "*.{ts,tsx}": [

@@ -1,12 +1,6 @@
 'use client';
 
 import { FeatureShowcase } from '@/components/ui/FeatureShowcase';
-import { Metadata } from 'next';
-
-export const metadata: Metadata = {
-  title: 'Feature Showcase',
-  description: 'Interactive feature showcase with synchronized image carousel',
-};
 
 const features = [
   {

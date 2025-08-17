@@ -1,14 +1,14 @@
 'use client';
 
 import { ResumeStudio } from '@/components/resume/ResumeStudio';
-import { ResumeProvider } from '@/contexts/ResumeStorageContext';
+import { ResumeStorageProvider } from '@/contexts/ResumeStorageContext';
 
 export default function ResumeBuilderPage() {
   return (
-    <ResumeProvider>
+    <ResumeStorageProvider>
       <div className="min-h-screen bg-gray-50">
         <ResumeStudio />
       </div>
-    </ResumeProvider>
+    </ResumeStorageProvider>
   );
 }

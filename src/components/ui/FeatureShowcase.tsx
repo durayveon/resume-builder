@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import { cn } from '@/lib/utils';
 
 type Feature = {
@@ -91,9 +92,11 @@ export function FeatureShowcase({
               )}
               aria-hidden={activeIndex !== index}
             >
-              <img
+              <Image
                 src={feature.image}
                 alt={feature.title}
+                width={800}
+                height={450}
                 className="w-full h-full object-cover"
               />
             </div>

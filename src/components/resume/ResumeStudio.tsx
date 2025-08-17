@@ -7,14 +7,21 @@ import { ResumeAnalysis } from './ResumeAnalysis';
 import { LinkedInImport } from './LinkedInImport';
 import { Button } from '@/components/Button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { FileText, BarChart2, Upload, Download, Save, Plus, Linkedin } from 'lucide-react';
+import {
+  FileText,
+  BarChart2,
+  Download,
+  Save,
+  Plus,
+  Linkedin,
+} from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 
 type ViewMode = 'editor' | 'preview' | 'analysis';
 
 export function ResumeStudio() {
   const { toast } = useToast();
-  const { currentResume, saveResume, createNewResume } = useResumeStorage();
+  const { saveResume, createNewResume } = useResumeStorage();
   const [viewMode, setViewMode] = useState<ViewMode>('editor');
   const [jobDescription, setJobDescription] = useState('');
   const [showLinkedInImport, setShowLinkedInImport] = useState(false);
@@ -23,14 +30,11 @@ export function ResumeStudio() {
 
   const handleSaveResume = async () => {
     if (!resumeData) return;
-    
+
     setIsSaving(true);
     try {
-      await saveResume(
-        resumeData,
-        `Resume ${new Date().toLocaleDateString()}`
-      );
-      
+      await saveResume(resumeData, `Resume ${new Date().toLocaleDateString()}`);
+
       toast({
         title: 'Success',
         description: 'Resume saved successfully',
@@ -71,7 +75,7 @@ export function ResumeStudio() {
     return (
       <div className="max-w-4xl mx-auto p-4">
         <Button
-          variant="ghost"
+          variant="outline"
           onClick={() => setShowLinkedInImport(false)}
           className="mb-4"
         >
@@ -92,7 +96,7 @@ export function ResumeStudio() {
             Create and optimize your professional resume
           </p>
         </div>
-        
+
         <div className="flex flex-wrap gap-2 w-full sm:w-auto">
           <Button
             variant="outline"
@@ -102,7 +106,7 @@ export function ResumeStudio() {
             <Plus className="h-4 w-4" />
             <span>New</span>
           </Button>
-          
+
           <Button
             variant="outline"
             onClick={() => setShowLinkedInImport(true)}
@@ -111,7 +115,7 @@ export function ResumeStudio() {
             <Linkedin className="h-4 w-4 text-[#0077B5]" />
             <span>Import from LinkedIn</span>
           </Button>
-          
+
           <Button
             variant="outline"
             onClick={handleExportPDF}
@@ -120,7 +124,7 @@ export function ResumeStudio() {
             <Download className="h-4 w-4" />
             <span>Export PDF</span>
           </Button>
-          
+
           <Button
             onClick={handleSaveResume}
             disabled={isSaving || !resumeData}
@@ -142,9 +146,9 @@ export function ResumeStudio() {
       </div>
 
       {/* Main Content */}
-      <Tabs 
-        value={viewMode} 
-        onValueChange={(value) => setViewMode(value as ViewMode)}
+      <Tabs
+        value={viewMode}
+        onValueChange={value => setViewMode(value as ViewMode)}
         className="w-full"
       >
         <div className="flex justify-between items-center mb-4">
@@ -157,8 +161,8 @@ export function ResumeStudio() {
               <FileText className="h-4 w-4" />
               <span>Preview</span>
             </TabsTrigger>
-            <TabsTrigger 
-              value="analysis" 
+            <TabsTrigger
+              value="analysis"
               className="flex items-center gap-1"
               disabled={!resumeData}
             >
@@ -166,21 +170,17 @@ export function ResumeStudio() {
               <span>Analysis</span>
             </TabsTrigger>
           </TabsList>
-          
+
           {viewMode === 'editor' && (
             <div className="flex items-center gap-2">
               <input
                 type="text"
                 placeholder="Paste job description for AI enhancement"
                 value={jobDescription}
-                onChange={(e) => setJobDescription(e.target.value)}
+                onChange={e => setJobDescription(e.target.value)}
                 className="text-sm px-3 py-1.5 border rounded-md w-64"
               />
-              <Button
-                variant="outline"
-                size="sm"
-                disabled={!jobDescription.trim()}
-              >
+              <Button variant="outline" disabled={!jobDescription.trim()}>
                 Enhance with AI
               </Button>
             </div>
@@ -189,11 +189,7 @@ export function ResumeStudio() {
 
         <TabsContent value="editor" className="mt-0">
           <div className="bg-white rounded-lg border p-6">
-            <AIResumeGenerator 
-              initialData={resumeData}
-              jobDescription={jobDescription}
-              onChange={setResumeData}
-            />
+            <AIResumeGenerator />
           </div>
         </TabsContent>
 
@@ -207,7 +203,8 @@ export function ResumeStudio() {
                   </h1>
                   <p className="text-gray-600">
                     {resumeData.personalInfo?.email}
-                    {resumeData.personalInfo?.phone && ` • ${resumeData.personalInfo.phone}`}
+                    {resumeData.personalInfo?.phone &&
+                      ` • ${resumeData.personalInfo.phone}`}
                   </p>
                   {resumeData.personalInfo?.linkedIn && (
                     <p className="text-blue-600 text-sm">
@@ -237,16 +234,21 @@ export function ResumeStudio() {
                             {exp.company || 'Company Name'}
                           </h3>
                           <p className="text-gray-600">
-                            {exp.startDate} - {exp.isCurrent ? 'Present' : exp.endDate || 'Present'}
+                            {exp.startDate} -{' '}
+                            {exp.isCurrent
+                              ? 'Present'
+                              : exp.endDate || 'Present'}
                           </p>
                         </div>
                         <p className="text-gray-700 font-medium">
                           {exp.position || 'Job Title'}
                         </p>
                         <ul className="list-disc pl-5 mt-1 space-y-1">
-                          {exp.responsibilities?.map((resp: string, j: number) => (
-                            <li key={j}>{resp}</li>
-                          ))}
+                          {exp.responsibilities?.map(
+                            (resp: string, j: number) => (
+                              <li key={j}>{resp}</li>
+                            )
+                          )}
                         </ul>
                       </div>
                     ))}
@@ -301,9 +303,11 @@ export function ResumeStudio() {
                       Certifications
                     </h2>
                     <ul className="list-disc pl-5">
-                      {resumeData.certifications.map((cert: string, i: number) => (
-                        <li key={i}>{cert}</li>
-                      ))}
+                      {resumeData.certifications.map(
+                        (cert: string, i: number) => (
+                          <li key={i}>{cert}</li>
+                        )
+                      )}
                     </ul>
                   </div>
                 )}
@@ -324,14 +328,15 @@ export function ResumeStudio() {
         <TabsContent value="analysis" className="mt-0">
           <div className="bg-white rounded-lg border p-6">
             {resumeData ? (
-              <ResumeAnalysis 
-                resumeData={resumeData} 
+              <ResumeAnalysis
+                resumeData={resumeData}
                 jobDescription={jobDescription}
               />
             ) : (
               <div className="text-center py-12">
                 <p className="text-gray-500">
-                  No resume data available for analysis. Please create a resume first.
+                  No resume data available for analysis. Please create a resume
+                  first.
                 </p>
               </div>
             )}

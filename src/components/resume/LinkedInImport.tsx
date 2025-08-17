@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useSession, signIn } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 import { Button } from '@/components/Button';
 import { useToast } from '@/components/ui/use-toast';
 import { ArrowRight, Linkedin, Loader2, CheckCircle } from 'lucide-react';
@@ -49,18 +49,25 @@ type LinkedInImportProps = {
   onCancel?: () => void;
 };
 
-export function LinkedInImport({ onImportComplete, onCancel }: LinkedInImportProps) {
-  const { data: session, status } = useSession();
+export function LinkedInImport({
+  onImportComplete,
+  onCancel,
+}: LinkedInImportProps) {
+  useSession();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
-  const [importedData, setImportedData] = useState<LinkedInProfile | null>(null);
+  const [importedData, setImportedData] = useState<LinkedInProfile | null>(
+    null
+  );
   const [selectedItems, setSelectedItems] = useState({
     experiences: true,
     education: true,
     skills: true,
     certifications: true,
   });
-  const [currentStep, setCurrentStep] = useState<'connect' | 'review' | 'complete'>('connect');
+  const [currentStep, setCurrentStep] = useState<
+    'connect' | 'review' | 'complete'
+  >('connect');
 
   const handleConnectLinkedIn = async () => {
     setIsLoading(true);
@@ -68,7 +75,7 @@ export function LinkedInImport({ onImportComplete, onCancel }: LinkedInImportPro
       // This would typically redirect to LinkedIn OAuth
       // For now, we'll simulate a successful connection
       await new Promise(resolve => setTimeout(resolve, 1500));
-      
+
       // Simulate fetching LinkedIn data
       const mockLinkedInData: LinkedInProfile = {
         id: '123456789',
@@ -76,7 +83,8 @@ export function LinkedInImport({ onImportComplete, onCancel }: LinkedInImportPro
         lastName: 'Doe',
         email: 'john.doe@example.com',
         headline: 'Senior Software Engineer at Tech Corp',
-        summary: 'Experienced software engineer with a passion for building scalable applications...',
+        summary:
+          'Experienced software engineer with a passion for building scalable applications...',
         location: 'San Francisco, California',
         profilePicture: '',
         experiences: [
@@ -86,7 +94,8 @@ export function LinkedInImport({ onImportComplete, onCancel }: LinkedInImportPro
             company: 'Tech Corp',
             startDate: '2020-01-01',
             isCurrent: true,
-            description: 'Leading a team of developers to build innovative solutions...',
+            description:
+              'Leading a team of developers to build innovative solutions...',
           },
           {
             id: 'exp2',
@@ -95,7 +104,8 @@ export function LinkedInImport({ onImportComplete, onCancel }: LinkedInImportPro
             startDate: '2017-06-01',
             endDate: '2019-12-31',
             isCurrent: false,
-            description: 'Developed and maintained web applications using modern frameworks...',
+            description:
+              'Developed and maintained web applications using modern frameworks...',
           },
         ],
         education: [
@@ -120,7 +130,7 @@ export function LinkedInImport({ onImportComplete, onCancel }: LinkedInImportPro
 
       setImportedData(mockLinkedInData);
       setCurrentStep('review');
-      
+
       toast({
         title: 'Success',
         description: 'Successfully connected to LinkedIn',
@@ -146,7 +156,7 @@ export function LinkedInImport({ onImportComplete, onCancel }: LinkedInImportPro
 
   const handleImportSelected = () => {
     if (!importedData) return;
-    
+
     // Format the data to match our resume structure
     const formattedData = {
       personalInfo: {
@@ -188,7 +198,7 @@ export function LinkedInImport({ onImportComplete, onCancel }: LinkedInImportPro
 
     onImportComplete(formattedData);
     setCurrentStep('complete');
-    
+
     toast({
       title: 'Success',
       description: 'Profile data imported successfully',
@@ -200,9 +210,12 @@ export function LinkedInImport({ onImportComplete, onCancel }: LinkedInImportPro
       <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-blue-100 mb-4">
         <Linkedin className="h-6 w-6 text-blue-600" />
       </div>
-      <h3 className="text-lg font-medium text-gray-900 mb-2">Import from LinkedIn</h3>
+      <h3 className="text-lg font-medium text-gray-900 mb-2">
+        Import from LinkedIn
+      </h3>
       <p className="text-gray-600 mb-6">
-        Connect your LinkedIn account to automatically import your work experience, education, and skills.
+        Connect your LinkedIn account to automatically import your work
+        experience, education, and skills.
       </p>
       <Button
         onClick={handleConnectLinkedIn}
@@ -278,11 +291,14 @@ export function LinkedInImport({ onImportComplete, onCancel }: LinkedInImportPro
           </div>
           {selectedItems.experiences && (
             <div className="p-4 space-y-4">
-              {importedData.experiences.map((exp) => (
+              {importedData.experiences.map(exp => (
                 <div key={exp.id} className="pl-2 border-l-2 border-blue-200">
                   <div className="font-medium">{exp.title}</div>
                   <div className="text-sm text-gray-600">
-                    {exp.company} • {exp.isCurrent ? `${exp.startDate} - Present` : `${exp.startDate} - ${exp.endDate}`}
+                    {exp.company} •{' '}
+                    {exp.isCurrent
+                      ? `${exp.startDate} - Present`
+                      : `${exp.startDate} - ${exp.endDate}`}
                   </div>
                   {exp.description && (
                     <p className="mt-1 text-sm text-gray-500 line-clamp-2">
@@ -316,7 +332,7 @@ export function LinkedInImport({ onImportComplete, onCancel }: LinkedInImportPro
           </div>
           {selectedItems.education && (
             <div className="p-4 space-y-3">
-              {importedData.education.map((edu) => (
+              {importedData.education.map(edu => (
                 <div key={edu.id} className="pl-2 border-l-2 border-blue-200">
                   <div className="font-medium">{edu.school}</div>
                   <div className="text-sm text-gray-600">
@@ -378,7 +394,10 @@ export function LinkedInImport({ onImportComplete, onCancel }: LinkedInImportPro
                   onChange={() => handleToggleSelect('certifications')}
                   className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                 />
-                <label htmlFor="import-certifications" className="ml-2 font-medium">
+                <label
+                  htmlFor="import-certifications"
+                  className="ml-2 font-medium"
+                >
                   Certifications
                 </label>
               </div>
@@ -400,16 +419,10 @@ export function LinkedInImport({ onImportComplete, onCancel }: LinkedInImportPro
         )}
 
         <div className="flex justify-between pt-2">
-          <Button
-            variant="outline"
-            onClick={() => setCurrentStep('connect')}
-          >
+          <Button variant="outline" onClick={() => setCurrentStep('connect')}>
             Back
           </Button>
-          <Button
-            onClick={handleImportSelected}
-            disabled={isLoading}
-          >
+          <Button onClick={handleImportSelected} disabled={isLoading}>
             {isLoading ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -432,13 +445,14 @@ export function LinkedInImport({ onImportComplete, onCancel }: LinkedInImportPro
       <div className="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-green-100 mb-4">
         <CheckCircle className="h-8 w-8 text-green-600" />
       </div>
-      <h3 className="text-lg font-medium text-gray-900 mb-2">Import Complete!</h3>
+      <h3 className="text-lg font-medium text-gray-900 mb-2">
+        Import Complete!
+      </h3>
       <p className="text-gray-600 mb-6">
-        Your LinkedIn data has been successfully imported. You can now review and edit your resume.
+        Your LinkedIn data has been successfully imported. You can now review
+        and edit your resume.
       </p>
-      <Button onClick={onCancel}>
-        Continue to Resume Builder
-      </Button>
+      <Button onClick={onCancel}>Continue to Resume Builder</Button>
     </div>
   );
 

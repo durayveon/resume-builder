@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { Button } from '@/components/Button';
 import { TextField, TextArea } from '@/components/Form';
 import { Experience } from '@/types/resume';
@@ -27,12 +26,16 @@ export function ExperienceForm({ experiences, onChange }: ExperienceFormProps) {
 
   const removeExperience = (id: string) => {
     if (experiences.length <= 1) return;
-    onChange(experiences.filter((exp) => exp.id !== id));
+    onChange(experiences.filter(exp => exp.id !== id));
   };
 
-  const updateExperience = (id: string, field: keyof Omit<Experience, 'id'>, value: any) => {
+  const updateExperience = (
+    id: string,
+    field: keyof Omit<Experience, 'id'>,
+    value: any
+  ) => {
     onChange(
-      experiences.map((exp) => (exp.id === id ? { ...exp, [field]: value } : exp))
+      experiences.map(exp => (exp.id === id ? { ...exp, [field]: value } : exp))
     );
   };
 
@@ -72,7 +75,7 @@ export function ExperienceForm({ experiences, onChange }: ExperienceFormProps) {
               <TextField
                 label="Company"
                 value={exp.company}
-                onChange={(e) =>
+                onChange={e =>
                   updateExperience(exp.id, 'company', e.target.value)
                 }
                 placeholder="Company name"
@@ -81,7 +84,7 @@ export function ExperienceForm({ experiences, onChange }: ExperienceFormProps) {
               <TextField
                 label="Position"
                 value={exp.position}
-                onChange={(e) =>
+                onChange={e =>
                   updateExperience(exp.id, 'position', e.target.value)
                 }
                 placeholder="Job title"
@@ -93,7 +96,7 @@ export function ExperienceForm({ experiences, onChange }: ExperienceFormProps) {
                     label="Start Date"
                     type="month"
                     value={exp.startDate}
-                    onChange={(e) =>
+                    onChange={e =>
                       updateExperience(exp.id, 'startDate', e.target.value)
                     }
                     required
@@ -105,7 +108,7 @@ export function ExperienceForm({ experiences, onChange }: ExperienceFormProps) {
                     type="month"
                     value={exp.endDate}
                     disabled={exp.isCurrent}
-                    onChange={(e) =>
+                    onChange={e =>
                       updateExperience(exp.id, 'endDate', e.target.value)
                     }
                     required={!exp.isCurrent}
@@ -117,12 +120,14 @@ export function ExperienceForm({ experiences, onChange }: ExperienceFormProps) {
                   <input
                     type="checkbox"
                     checked={exp.isCurrent}
-                    onChange={(e) =>
+                    onChange={e =>
                       updateExperience(exp.id, 'isCurrent', e.target.checked)
                     }
                     className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                   />
-                  <span className="text-sm text-gray-600">I currently work here</span>
+                  <span className="text-sm text-gray-600">
+                    I currently work here
+                  </span>
                 </label>
               </div>
             </div>
@@ -135,7 +140,7 @@ export function ExperienceForm({ experiences, onChange }: ExperienceFormProps) {
                 <div key={i} className="flex space-x-2">
                   <TextArea
                     value={resp}
-                    onChange={(e) => {
+                    onChange={e => {
                       const newResponsibilities = [...exp.responsibilities];
                       newResponsibilities[i] = e.target.value;
                       updateResponsibilities(exp.id, newResponsibilities);
@@ -148,7 +153,10 @@ export function ExperienceForm({ experiences, onChange }: ExperienceFormProps) {
                     <button
                       type="button"
                       onClick={() => {
-                        const newResponsibilities = [...exp.responsibilities, ''];
+                        const newResponsibilities = [
+                          ...exp.responsibilities,
+                          '',
+                        ];
                         updateResponsibilities(exp.id, newResponsibilities);
                       }}
                       className="text-blue-600 hover:text-blue-800 flex items-start pt-2"

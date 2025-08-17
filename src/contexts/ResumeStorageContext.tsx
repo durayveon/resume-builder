@@ -24,9 +24,9 @@ type ResumeStorageContextType = {
   createNewResume: () => Resume;
 };
 
-const ResumeStorageContext = createContext<ResumeStorageContextType | undefined>(
-  undefined
-);
+const ResumeStorageContext = createContext<
+  ResumeStorageContextType | undefined
+>(undefined);
 
 export function ResumeStorageProvider({
   children,
@@ -37,14 +37,14 @@ export function ResumeStorageProvider({
   const [currentResume, setCurrentResumeState] = useState<Resume | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const { data: session, status } = useSession();
+  const { status } = useSession();
 
   // Load saved resumes from localStorage or API
   useEffect(() => {
     const loadResumes = async () => {
       try {
         setIsLoading(true);
-        
+
         if (status === 'authenticated') {
           // TODO: Fetch from API when backend is ready
           // const response = await fetch('/api/resumes');
@@ -87,7 +87,7 @@ export function ResumeStorageProvider({
 
       if (id) {
         // Update existing resume
-        updatedResumes = resumes.map((resume) =>
+        updatedResumes = resumes.map(resume =>
           resume.id === id
             ? {
                 ...resume,
@@ -97,7 +97,7 @@ export function ResumeStorageProvider({
               }
             : resume
         );
-        savedResume = updatedResumes.find((r) => r.id === id)!;
+        savedResume = updatedResumes.find(r => r.id === id)!;
       } else {
         // Create new resume
         const newResume: Resume = {
@@ -131,7 +131,7 @@ export function ResumeStorageProvider({
 
   const deleteResume = async (id: string) => {
     try {
-      const updatedResumes = resumes.filter((resume) => resume.id !== id);
+      const updatedResumes = resumes.filter(resume => resume.id !== id);
       setResumes(updatedResumes);
 
       if (currentResume?.id === id) {
@@ -154,7 +154,7 @@ export function ResumeStorageProvider({
       return;
     }
 
-    const resume = resumes.find((r) => r.id === id);
+    const resume = resumes.find(r => r.id === id);
     if (resume) {
       setCurrentResumeState(resume);
     }

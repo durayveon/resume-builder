@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { Button } from '@/components/Button';
 import { TextField } from '@/components/Form';
 import { Education } from '@/types/resume';
@@ -26,12 +25,16 @@ export function EducationForm({ education, onChange }: EducationFormProps) {
 
   const removeEducation = (id: string) => {
     if (education.length <= 1) return;
-    onChange(education.filter((edu) => edu.id !== id));
+    onChange(education.filter(edu => edu.id !== id));
   };
 
-  const updateEducation = (id: string, field: keyof Omit<Education, 'id'>, value: string) => {
+  const updateEducation = (
+    id: string,
+    field: keyof Omit<Education, 'id'>,
+    value: string
+  ) => {
     onChange(
-      education.map((edu) => (edu.id === id ? { ...edu, [field]: value } : edu))
+      education.map(edu => (edu.id === id ? { ...edu, [field]: value } : edu))
     );
   };
 
@@ -67,7 +70,7 @@ export function EducationForm({ education, onChange }: EducationFormProps) {
               <TextField
                 label="Degree"
                 value={edu.degree}
-                onChange={(e) =>
+                onChange={e =>
                   updateEducation(edu.id, 'degree', e.target.value)
                 }
                 placeholder="e.g., Bachelor of Science"
@@ -76,7 +79,7 @@ export function EducationForm({ education, onChange }: EducationFormProps) {
               <TextField
                 label="Institution"
                 value={edu.institution}
-                onChange={(e) =>
+                onChange={e =>
                   updateEducation(edu.id, 'institution', e.target.value)
                 }
                 placeholder="University name"
@@ -85,7 +88,7 @@ export function EducationForm({ education, onChange }: EducationFormProps) {
               <TextField
                 label="Field of Study"
                 value={edu.fieldOfStudy}
-                onChange={(e) =>
+                onChange={e =>
                   updateEducation(edu.id, 'fieldOfStudy', e.target.value)
                 }
                 placeholder="e.g., Computer Science"
@@ -97,7 +100,7 @@ export function EducationForm({ education, onChange }: EducationFormProps) {
                     label="Start Year"
                     type="number"
                     value={edu.startYear}
-                    onChange={(e) =>
+                    onChange={e =>
                       updateEducation(edu.id, 'startYear', e.target.value)
                     }
                     placeholder="YYYY"
@@ -111,7 +114,7 @@ export function EducationForm({ education, onChange }: EducationFormProps) {
                     label="End Year (or expected)"
                     type="number"
                     value={edu.endYear}
-                    onChange={(e) =>
+                    onChange={e =>
                       updateEducation(edu.id, 'endYear', e.target.value)
                     }
                     placeholder="YYYY"

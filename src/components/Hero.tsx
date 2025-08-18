@@ -31,7 +31,7 @@ export function Hero() {
         and ace your interviews. All in one place.
       </p>
       <div className="mt-10 flex justify-center gap-x-6">
-        <Button href="/ai-studio">Build Your Resume</Button>
+        <Button href="/resume-studio">Build Your Resume</Button>
         <Button
           href="/jobs"
           variant="outline"

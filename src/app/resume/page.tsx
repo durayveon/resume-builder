@@ -1,14 +1,39 @@
-'use client';
+'use client'
 
-import { ResumeStudio } from '@/components/resume/ResumeStudio';
-import { ResumeStorageProvider } from '@/contexts/ResumeStorageContext';
+import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
+import { useEffect } from 'react'
+import ResumeStudio from '@/components/ResumeStudio' // Adjusted import path
+import { Header } from '@/components/Header'
 
 export default function ResumeBuilderPage() {
-  return (
-    <ResumeStorageProvider>
-      <div className="min-h-screen bg-gray-50">
-        <ResumeStudio />
+  const { data: session, status } = useSession()
+  const router = useRouter()
+
+  useEffect(() => {
+    if (status === 'unauthenticated') {
+      router.push('/auth/signin')
+    }
+  }, [status, router])
+
+  if (status === 'loading') {
+    return (
+      <div className="flex h-screen items-center justify-center bg-slate-900">
+        <p className="text-white">Loading...</p>
       </div>
-    </ResumeStorageProvider>
-  );
+    )
+  }
+
+  if (session) {
+    return (
+      <div className="min-h-screen bg-slate-900">
+        <Header />
+        <main>
+          <ResumeStudio />
+        </main>
+      </div>
+    )
+  }
+
+  return null
 }

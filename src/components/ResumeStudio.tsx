@@ -294,34 +294,6 @@ export default function ResumeStudio() {
     }
   };
 
-  const parseResumeForRefinement = (resumeContent: string) => {
-    // Parse the resume content and populate the refined form
-    // This is a simplified parser - you may need to adjust based on your resume format
-    const lines = resumeContent.split('\n');
-    const parsedData = {
-      name: '',
-      email: '',
-      phone: '',
-      linkedin: '',
-      summary: '',
-      experience: [],
-      education: [],
-      skills: ''
-    };
-    
-    // Basic parsing logic - adjust as needed
-    for (let i = 0; i < lines.length; i++) {
-      const line = lines[i].trim();
-      if (line.includes('@')) {
-        parsedData.email = line;
-      }
-      // Add more parsing logic as needed
-    }
-    
-    setRefinedFormData(parsedData);
-    setIsRefining(true);
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);

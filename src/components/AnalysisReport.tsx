@@ -1,6 +1,6 @@
 'use client'
 
-import { CheckCircleIcon, XCircleIcon, LightBulbIcon, PencilIcon, DocumentTextIcon } from '@heroicons/react/24/outline';
+import { CheckCircleIcon, LightBulbIcon, PencilIcon, DocumentTextIcon } from '@heroicons/react/24/outline';
 
 const ScoreCircle = ({ score }: { score: number }) => {
   const circumference = 2 * Math.PI * 45; // 2 * pi * radius

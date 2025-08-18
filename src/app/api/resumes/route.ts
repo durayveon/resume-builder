@@ -6,7 +6,7 @@ import { NextRequest, NextResponse } from 'next/server'
 export async function POST(req: NextRequest) {
   const session = await getServerSession(authOptions)
 
-  if (!session || !session.user?.id) {
+  if (!session || !session.user?.email) {
     return NextResponse.json({ error: 'Not authenticated' }, { status: 401 })
   }
 
@@ -21,7 +21,7 @@ export async function POST(req: NextRequest) {
       data: {
         title,
         content,
-        userId: session.user.id,
+        userId: session.user.email!,
       },
     })
 
@@ -32,17 +32,17 @@ export async function POST(req: NextRequest) {
   }
 }
 
-export async function GET(req: NextRequest) {
+export async function GET() {
   const session = await getServerSession(authOptions)
 
-  if (!session || !session.user?.id) {
+  if (!session || !session.user?.email) {
     return NextResponse.json({ error: 'Not authenticated' }, { status: 401 })
   }
 
   try {
     const resumes = await prisma.resume.findMany({
       where: {
-        userId: session.user.id,
+        userId: session.user.email!,
       },
       orderBy: {
         updatedAt: 'desc',

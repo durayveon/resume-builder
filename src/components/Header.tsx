@@ -130,7 +130,7 @@ function UserMenu() {
 }
 
 export function Header() {
-  const { data: session, status } = useSession()
+  const { status } = useSession()
 
   return (
     <header className="py-10">

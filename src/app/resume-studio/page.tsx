@@ -1,6 +1,6 @@
 import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
-import { ResumeStudio } from '@/components/ResumeStudio'
+import ResumeStudio from '@/components/ResumeStudio'
 
 export default function ResumeStudioPage() {
   return (

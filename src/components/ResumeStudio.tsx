@@ -1,9 +1,8 @@
 'use client'
 
 import React, { useState, useRef } from 'react'
-import { SparklesIcon, DocumentArrowUpIcon, ArrowDownTrayIcon, EyeIcon, PencilIcon, ChartBarIcon, BookmarkIcon, TrashIcon } from '@heroicons/react/24/outline'
+import { SparklesIcon, DocumentArrowUpIcon, ArrowDownTrayIcon, PencilIcon, ChartBarIcon, BookmarkIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { AnalysisReport } from './AnalysisReport'
-import { AuthButton } from './AuthButton'
 import { useSession } from 'next-auth/react'
 import jsPDF from 'jspdf'
 import html2canvas from 'html2canvas'
@@ -179,6 +178,19 @@ export default function ResumeStudio() {
     }
   };
 
+  const fetchSavedResumes = async () => {
+    if (!session) return;
+    try {
+      const response = await fetch('/api/resumes');
+      if (response.ok) {
+        const resumes = await response.json();
+        setSavedResumes(resumes);
+      }
+    } catch (error) {
+      console.error('Error fetching saved resumes:', error);
+    }
+  };
+
   React.useEffect(() => {
     fetchSavedResumes();
   }, [session]);
@@ -241,6 +253,9 @@ export default function ResumeStudio() {
       setIsDownloading(false);
     }
   };
+
+  const handleDeleteResume = async (id: string) => {
+    try {
       const response = await fetch(`/api/resumes/${id}`, {
         method: 'DELETE'
       });
@@ -251,7 +266,61 @@ export default function ResumeStudio() {
     } catch (err: any) {
       setError(err.message);
     }
-  }
+  };
+
+  const handleAnalyze = async () => {
+    if (!generatedResume) return;
+    
+    setLoading(true);
+    setError('');
+    
+    try {
+      const response = await fetch('/api/resume/analyze', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ resume: generatedResume }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to analyze resume');
+      }
+
+      const result = await response.json();
+      setAnalysisResult(result);
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const parseResumeForRefinement = (resumeContent: string) => {
+    // Parse the resume content and populate the refined form
+    // This is a simplified parser - you may need to adjust based on your resume format
+    const lines = resumeContent.split('\n');
+    const parsedData = {
+      name: '',
+      email: '',
+      phone: '',
+      linkedin: '',
+      summary: '',
+      experience: [],
+      education: [],
+      skills: ''
+    };
+    
+    // Basic parsing logic - adjust as needed
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i].trim();
+      if (line.includes('@')) {
+        parsedData.email = line;
+      }
+      // Add more parsing logic as needed
+    }
+    
+    setRefinedFormData(parsedData);
+    setIsRefining(true);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -311,7 +380,6 @@ export default function ResumeStudio() {
       <div className="mx-auto max-w-7xl px-6 py-12 lg:px-8">
         <div className="flex justify-between items-center pb-8 border-b border-gray-200">
           <h1 className="text-3xl font-bold tracking-tight text-gray-900">Resume Studio</h1>
-          <AuthButton />
         </div>
         <div className="mt-8 grid grid-cols-1 gap-8 lg:grid-cols-2">
           {/* Form Section */}
@@ -503,21 +571,20 @@ export default function ResumeStudio() {
                 <div key={resume.id} className="rounded-lg bg-white p-4 border border-gray-200 shadow-sm">
                   <div className="flex justify-between items-start mb-2">
                     <h3 className="text-sm font-semibold text-gray-900 truncate">{resume.name || 'Untitled Resume'}</h3>
-                    <button onClick={() => deleteSavedResume(resume.id)} className="text-red-600 hover:text-red-500">
+                    <button onClick={() => handleDeleteResume(resume.id)} className="text-red-600 hover:text-red-500">
                       <TrashIcon className="h-4 w-4" />
                     </button>
                   </div>
                   <p className="text-xs text-gray-500 mb-3">{new Date(resume.createdAt).toLocaleDateString()}</p>
                   <div className="text-xs text-gray-600 line-clamp-3 mb-3">{resume.content.substring(0, 150)}...</div>
                   <div className="flex space-x-2">
-                    <button 
+                    <button
                       onClick={() => {
                         setGeneratedResume(resume.content);
-                        parseResumeForRefinement(resume.content);
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
                       }}
                       className="inline-flex items-center rounded-md bg-white px-2 py-1 text-xs font-semibold text-gray-700 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
                     >
-                      <EyeIcon className="h-3 w-3 mr-1" />
                       View
                     </button>
                   </div>
@@ -528,5 +595,5 @@ export default function ResumeStudio() {
         )}
       </div>
     </div>
-  )
+  );
 }

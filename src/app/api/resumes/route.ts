@@ -1,57 +1,71 @@
-import { getServerSession } from 'next-auth/next'
-import { authOptions } from '@/lib/auth'
-import { prisma } from '@/lib/prisma'
-import { NextRequest, NextResponse } from 'next/server'
+import { prisma } from '@/lib/prisma';
+import { NextRequest, NextResponse } from 'next/server';
+import { createSupabaseServerClient } from '@/lib/supabase/server';
 
 export async function POST(req: NextRequest) {
-  const session = await getServerSession(authOptions)
+  const supabase = createSupabaseServerClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
-  if (!session || !session.user?.email) {
-    return NextResponse.json({ error: 'Not authenticated' }, { status: 401 })
+  if (!user?.email) {
+    return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
   }
 
   try {
-    const { title, content } = await req.json()
+    const { title, content } = await req.json();
 
     if (!title || !content) {
-      return NextResponse.json({ error: 'Title and content are required' }, { status: 400 })
+      return NextResponse.json(
+        { error: 'Title and content are required' },
+        { status: 400 }
+      );
     }
 
     const resume = await prisma.resume.create({
       data: {
         title,
         content,
-        userId: session.user.email!,
+        userId: user.email,
       },
-    })
+    });
 
-    return NextResponse.json(resume, { status: 201 })
+    return NextResponse.json(resume, { status: 201 });
   } catch (error) {
-    console.error('Error saving resume:', error)
-    return NextResponse.json({ error: 'Failed to save resume' }, { status: 500 })
+    console.error('Error saving resume:', error);
+    return NextResponse.json(
+      { error: 'Failed to save resume' },
+      { status: 500 }
+    );
   }
 }
 
 export async function GET() {
-  const session = await getServerSession(authOptions)
+  const supabase = createSupabaseServerClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
-  if (!session || !session.user?.email) {
-    return NextResponse.json({ error: 'Not authenticated' }, { status: 401 })
+  if (!user?.email) {
+    return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
   }
 
   try {
     const resumes = await prisma.resume.findMany({
       where: {
-        userId: session.user.email!,
+        userId: user.email,
       },
       orderBy: {
         updatedAt: 'desc',
       },
-    })
+    });
 
-    return NextResponse.json(resumes)
+    return NextResponse.json(resumes);
   } catch (error) {
-    console.error('Error fetching resumes:', error)
-    return NextResponse.json({ error: 'Failed to fetch resumes' }, { status: 500 })
+    console.error('Error fetching resumes:', error);
+    return NextResponse.json(
+      { error: 'Failed to fetch resumes' },
+      { status: 500 }
+    );
   }
 }
